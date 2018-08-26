@@ -1,0 +1,46 @@
+{
+  "name": "housecall",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server/server.js",
+    "react-dev": "webpack -d --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmbice/housecall.git"
+  },
+  "author": "Jordan Bice",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmbice/housecall/issues"
+  },
+  "homepage": "https://github.com/jmbice/housecall#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jquery": "^3.3.1",
+    "moment": "^2.22.2",
+    "mysql": "^2.16.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.0"
+  }
+}
