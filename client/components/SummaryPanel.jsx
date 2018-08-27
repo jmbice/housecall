@@ -1,9 +1,13 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import moment from 'moment';
+import 'react-dates/initialize';
+import { SingleDatePicker } from 'react-dates';
+
+import PropTypes from 'prop-types';
 
 const summary = {
-  padding: '10%',
-  paddingLeft: '15%',
+  padding: '5%',
+  paddingLeft: '10%',
 };
 
 const summaryServiceButtons = {
@@ -39,9 +43,14 @@ const SummaryPanel = (props) => {
   const {
     serviceHandler, next, address, city, state, zip, view,
     makeAppointment, totalPrice, isCartEmpty,
-    isFormEmpty, selectedServices
+    isFormEmpty, selectedServices, setDate, startDate, startTime
   } = props;
 
+  let rightNow = moment();
+  if (startDate) {
+    rightNow = moment(startDate);
+  }
+  let isFocused = true;
   let buttonOrCue;
   const addressSummary = (
     <div>
@@ -67,6 +76,22 @@ const SummaryPanel = (props) => {
     </div>
   );
 
+  const datePicker = (
+    <div>
+      <SingleDatePicker
+        date={rightNow}
+        onDateChange={(date) => {
+          setDate(moment(date).format('YYYY-MM-DD'));
+        }}
+        focused={rightNow}
+        onFocusChange={({ focused }) => console.log('Focus changed to:', focused)}
+        id={`${address}, ${city}, ${state}, ${Math.random(10000)}`}
+        orientation="vertical"
+        numberOfMonths={1}
+        verticalHeight={400}
+      />
+    </div>
+  );
 
   if (view === 0 && isCartEmpty) {
     buttonOrCue = (
@@ -90,13 +115,32 @@ const SummaryPanel = (props) => {
         <div style={nextButton} onClick={next}> Next</div>
       </div>
     );
-  } else if (view === 2) {
+  } else if (view === 2 && !startTime && !startDate) {
     buttonOrCue = (
       <div>
         {addressSummary}
+        <br />
+        {datePicker}
+      </div>
+    );
+  } else if (view === 2 && !startTime && startDate) {
+    buttonOrCue = (
+      <div>
+        {addressSummary}
+        <br />
+        {datePicker}
         <div style={nextButton} onClick={makeAppointment}> Make Appointment </div>
       </div>
-    )
+    );
+  } else if (view === 2 && startTime && startDate) {
+    buttonOrCue = (
+      <div>
+        {addressSummary}
+        <br />
+        {datePicker}
+        <div style={nextButton} onClick={makeAppointment}> Make Appointment </div>
+      </div>
+    );
   }
 
   return (
@@ -130,7 +174,6 @@ const SummaryPanel = (props) => {
         {totalPrice}
       </div>
       {buttonOrCue}
-
     </div>
   );
 };

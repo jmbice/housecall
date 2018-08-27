@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import SummaryPanel from './SummaryPanel.jsx';
 import ServiceMenu from './ServiceMenu.jsx';
@@ -28,6 +27,7 @@ class Landing extends React.Component {
     this.next = this.next.bind(this);
     this.formHandler = this.formHandler.bind(this);
     this.makeAppointment = this.makeAppointment.bind(this);
+    this.setDate = this.setDate.bind(this);
 
     this.state = {
       hours: '8:00am-8:00pm',
@@ -39,8 +39,8 @@ class Landing extends React.Component {
       city: 'Berkeley',
       state: 'CA',
       zip: '94606',
-      startTime: '14:00',
-      startDate: '2018-09-02',
+      startTime: '',
+      startDate: '',
       isCartEmpty: true,
       isFormEmpty: true,
       totalPrice: 0,
@@ -68,6 +68,10 @@ class Landing extends React.Component {
         this.setState({ services: data });
       },
     });
+  }
+
+  setDate(startDate) {
+    this.setState({ startDate });
   }
 
   makeAppointment() {
@@ -174,33 +178,13 @@ class Landing extends React.Component {
 
   render() {
     const {
-      hours, services, selectedServices, appointments, view, address, city, state, zip, startTime, startDate, isCartEmpty, isFormEmpty, totalPrice,
+      hours, services, selectedServices, appointments, view, address, city, state, zip,
+      startTime, startDate, isCartEmpty, isFormEmpty, totalPrice,
     } = this.state;
 
     if (view !== 3) {
       return (
         <div>
-          <div>
-            <h1>Hello Cake</h1>
-            <p>
-              Your providers&apos;s hours are:
-              {' '}
-              {JSON.stringify(hours)}
-              {view}
-            </p>
-            <p>
-              Your providers&apos;s services are:
-              {' '}
-              {JSON.stringify(services)}
-              {view}
-
-            </p>
-            <p>
-              You have these appointments:
-              {' '}
-              {JSON.stringify({ appointments })}
-            </p>
-          </div>
           <div id="leftPanel" style={leftWindow}>
             <LeftPanel
               services={services}
@@ -220,6 +204,7 @@ class Landing extends React.Component {
               serviceHandler={this.serviceHandler}
               makeAppointment={this.makeAppointment}
               next={this.next}
+              setDate={this.setDate}
               view={view}
               address={address}
               city={city}
@@ -228,6 +213,8 @@ class Landing extends React.Component {
               isCartEmpty={isCartEmpty}
               isFormEmpty={isFormEmpty}
               totalPrice={totalPrice}
+              startDate={startDate}
+              startTime={startTime}
             />
           </div>
         </div>
