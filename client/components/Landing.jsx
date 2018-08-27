@@ -73,7 +73,16 @@ class Landing extends React.Component {
           </p>
         </div>
         <div id="summary">
-          
+          <h3>
+            Services selected:
+              {services.map((e) => {
+                if (e.quantity > 0){
+                  <div key={e.id.toString()}>
+                    You requested {e.quantity} of {e.name}.
+                  </div>
+                }
+              });
+          </h3>
         </div>
         <div id="serviceMenu">
           <ServiceMenu
