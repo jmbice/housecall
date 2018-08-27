@@ -17,17 +17,28 @@ const LeftPanel = (props) => {
       </div>
     );
   }
-  return (
-    <div>
-      <AddressForm
-        formHandler={formHandler}
-        address={address}
-        city={city}
-        state={state}
-        zip={zip}
-      />
-    </div>
-  );
+
+  if (view === 1) {
+    return (
+      <div>
+        <AddressForm
+          formHandler={formHandler}
+          address={address}
+          city={city}
+          state={state}
+          zip={zip}
+        />
+      </div>
+    );
+  }
+
+  if (view === 2) {
+    return (
+      <div>
+        Hello World
+      </div>
+    )
+  }
 };
 
 export default LeftPanel;

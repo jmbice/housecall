@@ -20,11 +20,11 @@ const summaryServiceButtons = {
 
 const nextButton = {
   fontFamily: 'helvetica',
-  width: '50%',
-  fontSize: '30px',
+  fontSize: '20px',
   background: 'lightBlue',
   color: 'white',
-  padding: '5px',
+  marginTop: '11%',
+  padding: '20px',
   borderRadius: '5px',
   textAlign: 'center',
   verticalAlign: 'middle',
@@ -36,55 +36,101 @@ const buttonWrapper = {
 };
 
 const SummaryPanel = (props) => {
-  const { serviceSummary, serviceHandler, next } = props;
-  let total = 0;
-  let emptyCart = true;
-  const selected = [];
-  serviceSummary.map((service, index) => {
-    if (service.quantity > 0) {
-      const mutatedService = service;
-      mutatedService.index = index;
-      selected.push(mutatedService);
-      total += Number(service.price) * service.quantity;
-      emptyCart = false;
-    }
-  });
+  const {
+    serviceHandler, next, address, city, state, zip, view,
+    makeAppointment, totalPrice, isCartEmpty,
+    isFormEmpty, selectedServices
+  } = props;
+
+  let buttonOrCue;
+  const addressSummary = (
+    <div>
+      <h3>
+        Address:
+      </h3>
+      Street:
+      {' '}
+      {address}
+      <br/>
+      City:
+      {' '}
+      {city}
+      <br/>
+      State:
+      {' '}
+      {state}
+      <br/>
+      Zip:
+      {' '}
+      {zip}
+      <br/>
+    </div>
+  );
+
+
+  if (view === 0 && isCartEmpty) {
+    buttonOrCue = (
+      <p>Select something from the menu!</p>
+    );
+  } else if (view === 0 && !isCartEmpty) {
+    buttonOrCue = (
+      <div style={nextButton} onClick={next}> Next</div>
+    );
+  } else if (view === 1 && isFormEmpty) {
+    buttonOrCue = (
+      <div>
+        {addressSummary}
+        <p>Input your address!</p>
+      </div>
+    );
+  } else if (view === 1 && !isFormEmpty) {
+    buttonOrCue = (
+      <div>
+        {addressSummary}
+        <div style={nextButton} onClick={next}> Next</div>
+      </div>
+    );
+  } else if (view === 2) {
+    buttonOrCue = (
+      <div>
+        {addressSummary}
+        <div style={nextButton} onClick={makeAppointment}> Make Appointment </div>
+      </div>
+    )
+  }
 
   return (
     <div style={summary}>
       <h3>
         Services selected:
       </h3>
-      {selected.map((service, index) => (
-        <div key={service.id.toString()+":"+index.toString()}>
-          {service.quantity}
-          {' '}
-            x
-          {' '}
-          {service.name}
-          {' '}
-            for
-          {' '}
-          {service.duration}
-          {' '}
-            minutes.
-          <div style={buttonWrapper}>
-            <option style={summaryServiceButtons} value={`["-", ${service.index}]`} onClick={serviceHandler}>-</option>
-            <option style={summaryServiceButtons} value={`["+", ${service.index}]`} onClick={serviceHandler}>+</option>
+      <div>
+        {selectedServices.map((service, index) => (
+          <div key={service.id.toString()+":"+index.toString()}>
+            {service.quantity}
+            {' '}
+              x
+            {' '}
+            {service.name}
+            {' '}
+              for
+            {' '}
+            {service.duration}
+            {' '}
+              minutes.
+            <div style={buttonWrapper}>
+              <option style={summaryServiceButtons} value={`["-", ${service.index}]`} onClick={serviceHandler}>-</option>
+              <option style={summaryServiceButtons} value={`["+", ${service.index}]`} onClick={serviceHandler}>+</option>
+            </div>
+            <br />
+            <br />
           </div>
-          <br />
-          <br />
-        </div>
-      ))}
-      Total: ${total}
-      {emptyCart
-        ? (
-          <p>Select something from the menu!</p>
-        )
-        : (
-          <div style={nextButton} onClick={next}> Next</div>
-        )
-      }
+        ))}
+        Total: $
+        {totalPrice}
+      </div>
+      {buttonOrCue}
+
     </div>
   );
 };

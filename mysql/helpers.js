@@ -23,8 +23,8 @@ const getFutureAppointments = (callback) => {
 };
 
 const addAppointment = (data, callback) => {
-  const queryString = 'INSERT INTO appointments (client_id, service_id, start_time, start_date, address, city, state, zip) VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
-  db.query(queryString, [data.client_id, data.service_id, data.start_time, data.start_date, data.address, data.city, data.state, data.zip], (err, success) => {
+  const queryString = 'INSERT INTO appointments (client_id, service_id, duration, start_time, start_date, address, city, state, zip) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+  db.query(queryString, [data.client_id, data.service_id, data.duration, data.start_time, data.start_date, data.address, data.city, data.state, data.zip], (err, success) => {
     if (err) {
       callback(err);
     } else {

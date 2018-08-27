@@ -10,6 +10,7 @@ const serviceWrapper = {
   backgroundColor: '#b19cd9',
   color: 'white',
   marginTop: '10px',
+  marginLeft: '2.5%',
 };
 
 const serviceButtons = {
@@ -18,7 +19,7 @@ const serviceButtons = {
   marginLeft: '12%',
   fontSize: '20px',
   fontWeight: '600',
-  background: '#99cccc',
+  background: 'lightBlue',
   color: 'white',
   padding: '5px',
   borderRadius: '5px',
@@ -33,7 +34,7 @@ const ServiceMenu = (props) => {
     <div>
       <h3>Select your desired service or services:</h3>
       {services.map((service, index) => (
-        <div key={service.id.toString()} style={serviceWrapper}>
+        <div key={service.id} style={serviceWrapper}>
           <p>{service.name}</p>
           <p>Description: {service.description}</p>
           <p>Duration: {service.duration}</p>
