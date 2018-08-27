@@ -237,6 +237,17 @@ class Landing extends React.Component {
       <div>
         <h2>Confirmation</h2>
         <h3>Services</h3>
+        {selectedServices.map((service, index) => (
+            <div key={service.id.toString() + " " + index.toString()}>
+              {service.quantity}
+              {' '}
+                x
+              {' '}
+              {service.name}
+            </div>
+          ))}
+          Total: $
+          {totalPrice}
         <h3>Time</h3>
         <div>
           @ :
