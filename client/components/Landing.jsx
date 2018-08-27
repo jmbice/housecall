@@ -26,12 +26,17 @@ class Landing extends React.Component {
     super(props);
     this.serviceHandler = this.serviceHandler.bind(this);
     this.next = this.next.bind(this);
+    this.formHandler = this.formHandler.bind(this);
 
     this.state = {
       hours: '8:00am-8:00pm',
       services: [],
       appointments: [],
       view: 0,
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
     };
   }
 
@@ -71,6 +76,12 @@ class Landing extends React.Component {
     this.setState({ services: mutableService });
   }
 
+  formHandler(e) {
+    const field = e.target.name;
+    const target = e.target.value;
+    this.setState({ [field]: target });
+  }
+
   next() {
     const { view } = this.state;
     this.setState({ view: view + 1 });
@@ -78,7 +89,7 @@ class Landing extends React.Component {
 
   render() {
     const {
-      hours, services, appointments, view,
+      hours, services, appointments, view, address, city, state, zip,
     } = this.state;
 
     return (
@@ -94,7 +105,7 @@ class Landing extends React.Component {
           <p>
             You have these appointments:
             {' '}
-            {JSON.stringify({appointments})}
+            {JSON.stringify({ appointments })}
           </p>
         </div>
         <div id="leftPanel" style={leftWindow}>
@@ -102,6 +113,11 @@ class Landing extends React.Component {
             services={services}
             serviceHandler={this.serviceHandler}
             view={view}
+            address={address}
+            city={city}
+            state={state}
+            zip={zip}
+            formHandler={this.formHandler}
           />
         </div>
         <div id="rightPanel" style={rightWindow}>

@@ -20,7 +20,7 @@ const summaryServiceButtons = {
 
 const nextButton = {
   fontFamily: 'helvetica',
-  width: '15%',
+  width: '50%',
   fontSize: '30px',
   background: 'lightBlue',
   color: 'white',
