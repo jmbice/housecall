@@ -33,7 +33,7 @@ CREATE TABLE appointments (
   client_id INT(10),
   service_id INT(10),
   start_time VARCHAR(20),
-  start_date VARCHAR(20),
+  start_date DATE,
   address VARCHAR(50),
   city VARCHAR(50),
   state VARCHAR(3),
@@ -46,4 +46,6 @@ CREATE TABLE appointments (
 
 INSERT INTO clients (first_name, last_name, phone, email, address, city, state, zip) VALUES ("Milla", "Nizar", "xxx-5x5-94xx", "hotgirl@gmail.com", "123 Test", "Testville", "CA", "12345");
 INSERT INTO services (name, description, price, duration, setup, cleanup) VALUES ("60 minute deep tissue", "This is a description of a service", "100", "60", "15", "10");
-INSERT INTO appointments (client_id, service_id, start_time, start_date, address, city, state, zip) VALUES (1, 1, "16:00", "9/1/2018", "123 Test", "Testville", "CA", "12345");
+INSERT INTO services (name, description, price, duration, setup, cleanup) VALUES ("90 minute hot stone", "This is a description of a service", "200", "90", "30", "30");
+INSERT INTO appointments (client_id, service_id, start_time, start_date, address, city, state, zip) VALUES (1, 1, "16:00", "2018-09-01", "123 Test", "Testville", "CA", "12345");
+INSERT INTO appointments (client_id, service_id, start_time, start_date, address, city, state, zip) VALUES (1, 1, "10:00", "2018-09-02", "123 Test", "Testville", "CA", "12345");

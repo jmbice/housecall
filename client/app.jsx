@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Landing from './components/Landing.jsx';
 
 
-ReactDOM.render(<h1> Simplest React App </h1>, document.getElementById('housecall'));
+ReactDOM.render(<Landing />, document.getElementById('housecall'));
