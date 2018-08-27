@@ -1,7 +1,6 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 
-
 const serviceWrapper = {
   width: '100%',
   fontSize: '14px',
