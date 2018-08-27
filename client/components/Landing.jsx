@@ -2,17 +2,35 @@ import React from 'react';
 import $ from 'jquery';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import SummaryPanel from './SummaryPanel.jsx';
 import ServiceMenu from './ServiceMenu.jsx';
+import LeftPanel from './LeftPanel.jsx'
+
+
+const leftWindow = {
+  width: '50%',
+  float: 'left',
+};
+
+const rightWindow = {
+  width: '40%',
+  marginLeft: '5%',
+  height: '70%',
+  float: 'left',
+  border: '1px solid #ccc',
+  borderRadius: '10px',
+};
 
 class Landing extends React.Component {
   constructor(props) {
     super(props);
     this.serviceHandler = this.serviceHandler.bind(this);
+    this.next = this.next.bind(this);
 
     this.state = {
       hours: '8:00am-8:00pm',
       services: [],
-      existingAppointments: [],
+      appointments: [],
       view: 0,
     };
   }
@@ -23,7 +41,7 @@ class Landing extends React.Component {
       method: 'GET',
       dataType: 'json',
       success: (data) => {
-        this.setState({ existingAppointments: data });
+        this.setState({ appointments: data });
       },
     });
 
@@ -53,41 +71,44 @@ class Landing extends React.Component {
     this.setState({ services: mutableService });
   }
 
+  next() {
+    const { view } = this.state;
+    this.setState({ view: view + 1 });
+  }
+
   render() {
     const {
-      hours, services, existingAppointments,
+      hours, services, appointments, view,
     } = this.state;
+
     return (
       <div>
         <div>
           <h1>Hello Cake</h1>
           <p>
-            Your providers&apos;s appointments are:
+            Your providers&apos;s hours are:
             {' '}
-            {JSON.stringify(existingAppointments)}
+            {JSON.stringify(hours)}
+            {view}
           </p>
           <p>
-            You have selected:
+            You have these appointments:
             {' '}
-            {JSON.stringify(services)}
+            {JSON.stringify({appointments})}
           </p>
         </div>
-        <div id="summary">
-          <h3>
-            Services selected:
-              {services.map((e) => {
-                if (e.quantity > 0){
-                  <div key={e.id.toString()}>
-                    You requested {e.quantity} of {e.name}.
-                  </div>
-                }
-              });
-          </h3>
-        </div>
-        <div id="serviceMenu">
-          <ServiceMenu
+        <div id="leftPanel" style={leftWindow}>
+          <LeftPanel
             services={services}
             serviceHandler={this.serviceHandler}
+            view={view}
+          />
+        </div>
+        <div id="rightPanel" style={rightWindow}>
+          <SummaryPanel
+            serviceSummary={services}
+            serviceHandler={this.serviceHandler}
+            next={this.next}
           />
         </div>
       </div>
