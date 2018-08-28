@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import SummaryPanel from './SummaryPanel.jsx';
 import ServiceMenu from './ServiceMenu.jsx';
@@ -28,22 +29,24 @@ class Landing extends React.Component {
     this.formHandler = this.formHandler.bind(this);
     this.makeAppointment = this.makeAppointment.bind(this);
     this.setDate = this.setDate.bind(this);
+    this.setView = this.setView.bind(this);
 
     this.state = {
       hours: '8:00am-8:00pm',
       services: [],
       selectedServices: [],
       appointments: [],
-      view: 0,
-      address: '123',
-      city: 'Berkeley',
+      view: 2,
+      address: '1426 3rd Ave',
+      city: 'Oakland',
       state: 'CA',
       zip: '94606',
       startTime: '',
-      startDate: '',
+      startDate: moment().format('YYYY-MM-DD'),
       isCartEmpty: true,
       isFormEmpty: true,
       totalPrice: 0,
+      currentView: 'week',
     };
   }
 
@@ -72,6 +75,10 @@ class Landing extends React.Component {
 
   setDate(startDate) {
     this.setState({ startDate });
+  }
+
+  setView(key, value) {
+    this.setState({ [key]: value });
   }
 
   makeAppointment() {
@@ -179,7 +186,7 @@ class Landing extends React.Component {
   render() {
     const {
       hours, services, selectedServices, appointments, view, address, city, state, zip,
-      startTime, startDate, isCartEmpty, isFormEmpty, totalPrice,
+      startTime, startDate, isCartEmpty, isFormEmpty, totalPrice, currentView,
     } = this.state;
 
     if (view !== 3) {
@@ -195,6 +202,11 @@ class Landing extends React.Component {
               state={state}
               zip={zip}
               formHandler={this.formHandler}
+              startDate={startDate}
+              appointments={appointments}
+              hours={hours}
+              currentView={currentView}
+              setView={this.setView}
             />
           </div>
           <div id="rightPanel" style={rightWindow}>

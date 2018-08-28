@@ -26,9 +26,11 @@
     "mysql": "^2.16.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
+    "react-big-calendar": "^0.19.2",
     "react-dates": "^17.2.0",
     "react-dom": "^16.4.2",
-    "react-simple-datepicker": "^0.1.4"
+    "react-simple-datepicker": "^0.1.4",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

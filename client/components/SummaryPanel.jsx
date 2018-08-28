@@ -83,7 +83,8 @@ const SummaryPanel = (props) => {
         onDateChange={(date) => {
           setDate(moment(date).format('YYYY-MM-DD'));
         }}
-        focused={rightNow}
+        focused={isFocused}
+        hideKeyboardShortcutsPanel
         onFocusChange={({ focused }) => console.log('Focus changed to:', focused)}
         id={`${address}, ${city}, ${state}, ${Math.random(10000)}`}
         orientation="vertical"
