@@ -206,10 +206,9 @@ const googleData = {
 const TimePicker = (props) => {
   const {
     startDate, appointments, hours, currentView, setView,
-    address, city, state, zip,
+    address, city, state, zip, rbcAppointments,
   } = props;
 
-  const rbcAppointments = [];
   // hardCoded schedule
   const minTime = new Date();
   minTime.setHours(9, 0, 0);
@@ -223,43 +222,45 @@ const TimePicker = (props) => {
     console.log('the title is:', title, start, end);
   };
 
-  const convertStartTime = (stupidDate, stupidTime) => {
-    const parsedDate = stupidDate.split('T')[0].split('-');
-    parsedDate[0] = Number(parsedDate[0]);
-    parsedDate[1] = Number(parsedDate[1]) - 1;
-    parsedDate[2] = Number(parsedDate[2]);
+  // const rbcAppointments = [];
 
-    const parsedTime = stupidTime.split(':');
-    parsedTime[0] = Number(parsedTime[0]);
-    parsedTime[1] = Number(parsedTime[1]);
-    return parsedDate.concat(parsedTime.concat([0, 0]));
-  };
+  // const convertStartTime = (stupidDate, stupidTime) => {
+  //   const parsedDate = stupidDate.split('T')[0].split('-');
+  //   parsedDate[0] = Number(parsedDate[0]);
+  //   parsedDate[1] = Number(parsedDate[1]) - 1;
+  //   parsedDate[2] = Number(parsedDate[2]);
+  //
+  //   const parsedTime = stupidTime.split(':');
+  //   parsedTime[0] = Number(parsedTime[0]);
+  //   parsedTime[1] = Number(parsedTime[1]);
+  //   return parsedDate.concat(parsedTime.concat([0, 0]));
+  // };
+  //
+  // const convertEndTime = (stupidDate, time, duration) => {
+  //   const newTime = moment(time, 'HH:mm').add(Number(duration), 'm').format('HH:mm').split(':');
+  //   newTime[0] = Number(newTime[0]);
+  //   newTime[1] = Number(newTime[1]);
+  //   const parsedDate = stupidDate.split('T')[0].split('-');
+  //   parsedDate[0] = Number(parsedDate[0]);
+  //   parsedDate[1] = Number(parsedDate[1]) - 1;
+  //   parsedDate[2] = Number(parsedDate[2]);
+  //   return parsedDate.concat(newTime.concat([0, 0]));
+  // };
 
-  const convertEndTime = (stupidDate, time, duration) => {
-    const newTime = moment(time, 'HH:mm').add(Number(duration), 'm').format('HH:mm').split(':');
-    newTime[0] = Number(newTime[0]);
-    newTime[1] = Number(newTime[1]);
-    const parsedDate = stupidDate.split('T')[0].split('-');
-    parsedDate[0] = Number(parsedDate[0]);
-    parsedDate[1] = Number(parsedDate[1]) - 1;
-    parsedDate[2] = Number(parsedDate[2]);
-    return parsedDate.concat(newTime.concat([0, 0]));
-  };
-
-  appointments.forEach((appt) => {
-    const newEvent = {};
-    newEvent.id = appt.id;
-    newEvent.title = `Client ${appt.client_id}`;
-    newEvent.desc = `Services: ${appt.service_id}`;
-    newEvent.allDay = false;
-    newEvent.start = new Date(...convertStartTime(appt.start_date, appt.start_time));
-    newEvent.end = new Date(...convertEndTime(appt.start_date, appt.start_time, appt.duration));
-    newEvent.address = appt.address;
-    newEvent.city = appt.city;
-    newEvent.state = appt.state;
-    newEvent.zip = appt.zip;
-    rbcAppointments.push(newEvent);
-  });
+  // appointments.forEach((appt) => {
+  //   const newEvent = {};
+  //   newEvent.id = appt.id;
+  //   newEvent.title = `Client ${appt.client_id}`;
+  //   newEvent.desc = `Services: ${appt.service_id}`;
+  //   newEvent.allDay = false;
+  //   newEvent.start = new Date(...convertStartTime(appt.start_date, appt.start_time));
+  //   newEvent.end = new Date(...convertEndTime(appt.start_date, appt.start_time, appt.duration));
+  //   newEvent.address = appt.address;
+  //   newEvent.city = appt.city;
+  //   newEvent.state = appt.state;
+  //   newEvent.zip = appt.zip;
+  //   rbcAppointments.push(newEvent);
+  // });
 
   const googleTravelTimes = (departureTime) => {
     const origins = [];
@@ -286,7 +287,7 @@ const TimePicker = (props) => {
       completeString = `https://maps.googleapis.com/maps/api/distancematrix/json${locationsString}${paramatersString}`;
     }
 
-    console.log(completeString);
+    //console.log(completeString);
     // $.ajax({
     //   url: 'http://localhost:3000/api/provider/travelTimes',
     //   method: 'POST',
@@ -299,24 +300,26 @@ const TimePicker = (props) => {
   };
   //googleTravelTimes();
 
-  const adjustAppointments = (googleData) => {
-    const newAppointments = appointments.map((apt, index) => {
+  const adjustAppointments = () => {
+    const newAppointments = [];
+    appointments.forEach((apt, index) => {
+      const newEvent = {};
       const before = index * 2;
       const after = before + 1;
-      const durationBefore = googleData.rows[before][before].duration.value;
-      const durationAfter = googleData.rows[after][after].duration.value;
-      const newEvent = apt;
-      newEvent.duration = JSON.stringify(Math.floor((Number(apt.duration) + durationBefore + durationAfter) / 60) + 1);
-      newEvent.start_time = moment(apt.duration, 'HH:mm').subtract(durationBefore, 's').format('HH:mm');
-      console.log(apt);
-      console.log(newEvent);
-      return newEvent;
+      const durationBefore = Math.ceil(googleData.rows[before].elements[before].duration.value / 60);
+      const durationAfter = Math.ceil(googleData.rows[after].elements[after].duration.value / 60);
+      newEvent.duration = (Number(apt.duration) + durationBefore + durationAfter).toString();
+      newEvent.start_time = moment(apt.start_time, 'HH:mm');
+      newEvent.start_time.subtract(durationBefore, 'minutes');
+      newEvent.start_time = newEvent.start_time.format('HH:mm');
+      newAppointments.push(newEvent);
     });
-  }
+    return newAppointments;
+  };
 
   return (
     <div>
-      {JSON.stringify(appointments)}
+      {JSON.stringify(rbcAppointments)}
       <div>
         <BigCalendar
           selectable

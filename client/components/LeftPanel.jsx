@@ -6,7 +6,7 @@ import TimePicker from './TimePicker.jsx';
 const LeftPanel = (props) => {
   const {
     view, services, serviceHandler, address, city, state, zip,
-    formHandler, startDate, appointments, hours, currentView, setView,
+    formHandler, startDate, appointments, hours, currentView, setView, rbcAppointments,
   } = props;
 
   if (view === 0) {
@@ -48,6 +48,7 @@ const LeftPanel = (props) => {
         <TimePicker
           startDate={startDate}
           appointments={appointments}
+          rbcAppointments={rbcAppointments}
           hours={hours}
           currentView={currentView}
           setView={setView}

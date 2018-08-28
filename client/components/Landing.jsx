@@ -36,6 +36,7 @@ class Landing extends React.Component {
       services: [],
       selectedServices: [],
       appointments: [],
+      rbcAppointments: [],
       view: 2,
       address: '1426 3rd Ave',
       city: 'Oakland',
@@ -56,7 +57,9 @@ class Landing extends React.Component {
       method: 'GET',
       dataType: 'json',
       success: (data) => {
-        this.setState({ appointments: data });
+        this.setState({ appointments: data }, () => {
+          this.RBCformating();
+        });
       },
     });
 
@@ -119,6 +122,51 @@ class Landing extends React.Component {
         }
       },
     });
+  }
+
+  RBCformating() {
+    const { appointments } = this.state;
+    const rbcAppointments = [];
+
+    const convertStartTime = (stupidDate, stupidTime) => {
+      const parsedDate = stupidDate.split('T')[0].split('-');
+      parsedDate[0] = Number(parsedDate[0]);
+      parsedDate[1] = Number(parsedDate[1]) - 1;
+      parsedDate[2] = Number(parsedDate[2]);
+
+      const parsedTime = stupidTime.split(':');
+      parsedTime[0] = Number(parsedTime[0]);
+      parsedTime[1] = Number(parsedTime[1]);
+      return parsedDate.concat(parsedTime.concat([0, 0]));
+    };
+
+    const convertEndTime = (stupidDate, time, duration) => {
+      const newTime = moment(time, 'HH:mm').add(Number(duration), 'm').format('HH:mm').split(':');
+      newTime[0] = Number(newTime[0]);
+      newTime[1] = Number(newTime[1]);
+      const parsedDate = stupidDate.split('T')[0].split('-');
+      parsedDate[0] = Number(parsedDate[0]);
+      parsedDate[1] = Number(parsedDate[1]) - 1;
+      parsedDate[2] = Number(parsedDate[2]);
+      return parsedDate.concat(newTime.concat([0, 0]));
+    };
+
+    appointments.forEach((appt) => {
+      const newEvent = {};
+      newEvent.id = appt.id;
+      newEvent.title = `Client ${appt.client_id}`;
+      newEvent.desc = `Services: ${appt.service_id}`;
+      newEvent.allDay = false;
+      newEvent.start = new Date(...convertStartTime(appt.start_date, appt.start_time));
+      newEvent.end = new Date(...convertEndTime(appt.start_date, appt.start_time, appt.duration));
+      newEvent.address = appt.address;
+      newEvent.city = appt.city;
+      newEvent.state = appt.state;
+      newEvent.zip = appt.zip;
+      rbcAppointments.push(newEvent);
+    });
+
+    this.setState({ rbcAppointments });
   }
 
   evaluateServiceSelections() {
@@ -186,7 +234,7 @@ class Landing extends React.Component {
   render() {
     const {
       hours, services, selectedServices, appointments, view, address, city, state, zip,
-      startTime, startDate, isCartEmpty, isFormEmpty, totalPrice, currentView,
+      startTime, startDate, isCartEmpty, isFormEmpty, totalPrice, currentView, rbcAppointments,
     } = this.state;
 
     if (view !== 3) {
@@ -204,6 +252,7 @@ class Landing extends React.Component {
               formHandler={this.formHandler}
               startDate={startDate}
               appointments={appointments}
+              rbcAppointments={rbcAppointments}
               hours={hours}
               currentView={currentView}
               setView={this.setView}
