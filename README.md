@@ -5,8 +5,8 @@
 • Designed calendar UI using moment.js, React-Dates, React-Big-Calendar, and custom business logic when ideal templating option was not available
 <br />
 <br />
-To run:  <br />
-• Download locally <br />
+To run locally, you will need to:  <br />
+• Download the repo <br />
 • Open terminal and migrate to project directory <br />
 • 'NPM install' to install dependencies <br />
 • 'NPM run react-dev' to start compiling <br />
